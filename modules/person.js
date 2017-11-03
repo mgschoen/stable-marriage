@@ -1,7 +1,7 @@
-const IDFactory = require('./id-factory.js');
+const tools = require('./tools.js');
 const Gender = require('./gender.js');
 
-const idFactory = new IDFactory();
+const idFactory = new tools.IDFactory();
 
 class Person {
 
@@ -20,20 +20,16 @@ class Person {
     }
 
     toString () {
-        return 'Person {id: ' + this.indentify(this.id) + ', gender: ' + this.gender.value + ', engagedWith: '
-            + this.indentify(this.engagedWith) + '}';
-    }
-
-    indentify (number) {
-        return (number < 10) ? '  ' + number : (number < 100) ? ' ' + number : '' + number;
+        return 'Person {id: ' + tools.indentify(this.id) + ', gender: ' + this.gender.value + ', engagedWith: '
+            + tools.indentify(this.engagedWith) + '}';
     }
 
     printPriorityList () {
 
         if (this.priorityList) {
-            var string = this.indentify(this.id) + ' ' + this.toString() + ': ';
+            var string = tools.indentify(this.id) + ' ' + this.toString() + ': ';
             this.priorityList.forEach((v,i) => {
-                string += (i == 0) ? this.indentify(v) : ', ' + this.indentify(v);
+                string += (i == 0) ? tools.indentify(v) : ', ' + tools.indentify(v);
             });
             return string;
         } else {

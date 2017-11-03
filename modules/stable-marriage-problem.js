@@ -2,6 +2,7 @@ const colors = require('colors');
 const emoji = require('node-emoji');
 const Gender = require('./gender.js');
 const Person = require('./person.js');
+const tools = require('./tools.js');
 
 const emo = {
     pray: emoji.get('pray'),
@@ -118,18 +119,19 @@ class StableMarriageProblem {
     propose (manId, womanId) {
         let man = this.getPersonByID(new Gender('male'), manId),
             woman = this.getPersonByID(new Gender('female'), womanId);
-        console.log(colors.red('  Man ' + manId + ': ' + emo.pray + '  "Do you love me, woman ' + womanId + '?"'));
+        console.log(colors.red(tools.indentify('Man ' + manId, 8) + ': ' + emo.pray + '  "Do you love me, woman ' +
+            womanId + '?"'));
         var womanString = 'My current husband is number ' +  woman.priorityList.indexOf(woman.engagedWith) +
             ' on my list and you are number ' + woman.priorityList.indexOf(manId) + '.';
         if (woman.engagedWith !== null &&
             woman.priorityList.indexOf(woman.engagedWith) < woman.priorityList.indexOf(manId)) {
             man.nextProposal++;
-            console.log(colors.green('Woman ' + womanId + ': ' + emo.grimacing +
+            console.log(colors.green(tools.indentify('Woman ' + womanId, 8) + ': ' + emo.grimacing +
                 '  "I don\'t love you, I\'m sorry. ' + womanString + '"'));
             return false;
         }
-        console.log(colors.green('Woman ' + womanId + ': ' + emo.heartEyes + '  "Yes, I love you! ' +
-            womanString + '"'));
+        console.log(colors.green(tools.indentify('Woman ' + womanId, 8) + ': ' + emo.heartEyes +
+            '  "Yes, I love you! ' + womanString + '"'));
         this.engage(man, woman);
         man.nextProposal++;
         return true;
@@ -159,10 +161,11 @@ class StableMarriageProblem {
         while (this.existsFreeMan()) {
             c = this.nextFreeMan(c);
             let proposer = this.men[c];
-            console.log('\n\n  Man ' + proposer.id + ' is now looking for a partner...');
+            console.log('\n\n\n  Man ' + proposer.id + ' is now looking for a partner...');
             while (proposer.nextProposal < proposer.priorityList.length &&
             !this.propose(proposer.id, proposer.priorityList[proposer.nextProposal])) {
-                console.log('  ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob);
+                console.log(tools.indentify('', 3) + emo.sob + ' ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob + ' ' +
+                    emo.sob + '\n');
             }
         }
     }

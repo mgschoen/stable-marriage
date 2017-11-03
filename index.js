@@ -1,4 +1,4 @@
-const StableMarriageProblem = require('./classes/stable-marriage-problem.js');
+const StableMarriageProblem = require('./modules/stable-marriage-problem.js');
 
 let smp = new StableMarriageProblem();
 smp.match();
