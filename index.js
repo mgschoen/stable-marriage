@@ -1,6 +1,16 @@
 const StableMarriageProblem = require('./modules/stable-marriage-problem.js');
 
-let smp = new StableMarriageProblem();
+var n = 20;
+process.argv.forEach((v, i) => {
+    if (v.indexOf('n=') == 0) {
+        let parsed = parseInt(v.slice(2));
+        if (!isNaN(parsed)) n = parsed;
+    }
+});
+
+console.log('Generating stable marriage problem of size n=' + n + '...');
+
+let smp = new StableMarriageProblem(n);
 smp.match();
 console.log('\n\n\n');
 console.log('* * * * * * * * * * * * * * * * * * *');

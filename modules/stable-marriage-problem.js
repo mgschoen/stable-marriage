@@ -141,17 +141,17 @@ class StableMarriageProblem {
         console.log('');
         // divorce
         if (man.engagedWith !== null) {
-            console.log('  Man ' + man.id + ' ' + emo.brokenHeart + ' ' + emo.cry +
-                '  Woman ' + man.engagedWith);
+            console.log(colors.cyan('  Man ' + man.id + ' ' + emo.brokenHeart + ' ' + emo.cry +
+                '  Woman ' + man.engagedWith));
             this.getPersonByID(new Gender('female'), man.engagedWith).engagedWith = null;
         }
         if (woman.engagedWith !== null) {
-            console.log('  Woman ' + woman.id + ' ' + emo.brokenHeart + ' ' + emo.cry +
-                '  Man ' + woman.engagedWith);
+            console.log(colors.cyan('  Woman ' + woman.id + ' ' + emo.brokenHeart + ' ' + emo.cry +
+                '  Man ' + woman.engagedWith));
             this.getPersonByID(new Gender('male'), woman.engagedWith).engagedWith = null;
         }
         //engage
-        console.log('  Man ' + man.id + ' ' + emo.ring + ' ' + emo.blush + '  Woman ' + woman.id);
+        console.log(colors.cyan('  Man ' + man.id + ' ' + emo.ring + ' ' + emo.blush + '  Woman ' + woman.id));
         man.engagedWith = woman.id;
         woman.engagedWith = man.id;
     }
