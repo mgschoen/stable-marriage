@@ -1,5 +1,18 @@
+const colors = require('colors');
+const emoji = require('node-emoji');
 const Gender = require('./gender.js');
 const Person = require('./person.js');
+
+const emo = {
+    pray: emoji.get('pray'),
+    grimacing: emoji.get('grimacing'),
+    heartEyes: emoji.get('heart_eyes'),
+    brokenHeart: emoji.get('broken_heart'),
+    cry: emoji.get('cry'),
+    ring: emoji.get('ring'),
+    blush: emoji.get('blush'),
+    sob: emoji.get('sob')
+};
 
 class StableMarriageProblem {
 
@@ -82,7 +95,6 @@ class StableMarriageProblem {
             }
             c++;
         }
-        console.log('\n# # # Begin Iteration\nStableMarriageProblem.existsFreeMan() = ' + result);
         return result;
     }
 
@@ -100,40 +112,44 @@ class StableMarriageProblem {
                 c = (c+1) % this.men.length;
             }
         }
-        console.log('StableMarriageProblem.nextFreeMan() = ' + result);
         return result;
     }
 
     propose (manId, womanId) {
         let man = this.getPersonByID(new Gender('male'), manId),
             woman = this.getPersonByID(new Gender('female'), womanId);
-        console.log('Woman ' + womanId + ': "My current husband is number ' +
-            woman.priorityList.indexOf(woman.engagedWith) + ' on my list and you are number ' +
-            woman.priorityList.indexOf(manId) + '"');
+        console.log(colors.red('  Man ' + manId + ': ' + emo.pray + '  "Do you love me, woman ' + womanId + '?"'));
+        var womanString = 'My current husband is number ' +  woman.priorityList.indexOf(woman.engagedWith) +
+            ' on my list and you are number ' + woman.priorityList.indexOf(manId) + '.';
         if (woman.engagedWith !== null &&
             woman.priorityList.indexOf(woman.engagedWith) < woman.priorityList.indexOf(manId)) {
             man.nextProposal++;
-            console.log('StableMarriageProlem.propose(' + manId + ', ' + womanId + ') - rejected');
+            console.log(colors.green('Woman ' + womanId + ': ' + emo.grimacing +
+                '  "I don\'t love you, I\'m sorry. ' + womanString + '"'));
             return false;
         }
-        console.log('StableMarriageProblem.propose(' + manId + ', ' + womanId + ') - accepted');
+        console.log(colors.green('Woman ' + womanId + ': ' + emo.heartEyes + '  "Yes, I love you! ' +
+            womanString + '"'));
         this.engage(man, woman);
         man.nextProposal++;
         return true;
     }
 
     engage (man, woman) {
+        console.log('');
         // divorce
         if (man.engagedWith !== null) {
-            console.log('StableMarriageProblem.engage() : Divorcing man ' + man.id + ' from his wife');
+            console.log('  Man ' + man.id + ' ' + emo.brokenHeart + ' ' + emo.cry +
+                '  Woman ' + man.engagedWith);
             this.getPersonByID(new Gender('female'), man.engagedWith).engagedWith = null;
         }
         if (woman.engagedWith !== null) {
-            console.log('StableMarriageProblem.engage() : Divorcing woman ' + woman.id + ' from her husband');
+            console.log('  Woman ' + woman.id + ' ' + emo.brokenHeart + ' ' + emo.cry +
+                '  Man ' + woman.engagedWith);
             this.getPersonByID(new Gender('male'), woman.engagedWith).engagedWith = null;
         }
         //engage
-        console.log('StableMarriageProblem.engage() : Engaging man ' + man.id + ' and woman ' + woman.id);
+        console.log('  Man ' + man.id + ' ' + emo.ring + ' ' + emo.blush + '  Woman ' + woman.id);
         man.engagedWith = woman.id;
         woman.engagedWith = man.id;
     }
@@ -143,9 +159,10 @@ class StableMarriageProblem {
         while (this.existsFreeMan()) {
             c = this.nextFreeMan(c);
             let proposer = this.men[c];
+            console.log('\n\n  Man ' + proposer.id + ' is now looking for a partner...');
             while (proposer.nextProposal < proposer.priorityList.length &&
             !this.propose(proposer.id, proposer.priorityList[proposer.nextProposal])) {
-                console.log('HULK');
+                console.log('  ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob + ' ' + emo.sob);
             }
         }
     }
