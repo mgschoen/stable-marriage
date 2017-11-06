@@ -1,11 +1,11 @@
 class Gender {
 
     constructor (gender = 'm') {
-        if (['male', 'female', 'm', 'f'].indexOf(gender) < 0) {
+        if (['male', 'female', 'm', 'f', 'man', 'woman', 'men', 'women'].indexOf(gender) < 0) {
             throw new Error('Invalid gender string in constructor for Gender class. Only \'male\', ' +
-                '\'female\', \'m\' and \'f\' allowed.');
+                '\'female\', \'m\', \'f\', \'man\', \'woman\', \'men\' and \'women\' allowed.');
         }
-        this.gender = (['male', 'm'].indexOf(gender) >= 0) ? 'M' : 'F';
+        this.gender = (['male', 'm', 'man', 'men'].indexOf(gender) >= 0) ? 'M' : 'F';
     }
 
     get value () {

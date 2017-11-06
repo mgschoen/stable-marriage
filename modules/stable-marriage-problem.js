@@ -17,25 +17,70 @@ const emo = {
 
 class StableMarriageProblem {
 
-    constructor (n = 20) {
+    constructor (config) {
 
-        // Create elements
+        if (typeof config !== 'object') {
+            throw new Error('StableMarriageProblem can only be instantiated with a config object'); }
+        if (!config.hasOwnProperty('men') || !config.hasOwnProperty('women')) {
+            throw new Error('Config object must have properties "men" and "women" specified'); }
+        if (!config.men instanceof Object || !config.women instanceof Object ||
+            Array.isArray(config.men) || Array.isArray(config.women)) {
+            throw new Error('Config object\'s properties "men" and "women" must be key-value paired Objects'); }
+        // The following check can be omitted as soon as different sized sets are supported
+        if (Object.keys(config.men).length !== Object.keys(config.women).length) {
+            throw new Error('Men and women sets need to be of the same size'); }
+
+        this.n = Object.keys(config.men).length;
         this.men = [];
         this.women = [];
-        var c = 0;
-        while (c<n) {
-            this.men[this.men.length] = new Person();
-            this.women[this.women.length] = new Person('female');
-            c++;
+
+        let configMenKeys = Object.keys(config.men);
+        let configWomenKeys = Object.keys(config.women);
+
+        let keyMapping = {};
+
+        // Create persons and establish a mapping between config keys and internal IDs
+        for (let g in config) {
+            if (g === 'men' || g === 'women') {
+                for (let k in config[g]) {
+                    let person = new Person();
+                    keyMapping[k] = person.id;
+                    if (g === 'men') {
+                        this.men[this.men.length] = person; }
+                    else {
+                        this.women[this.women.length] = person; }
+                }
+            }
         }
 
-        // Create priority lists
-        this.men.forEach(v => {
-            v.setPriorityList(tools.shuffledArray(this.femaleIDs));
-        });
-        this.women.forEach(v => {
-            v.setPriorityList(tools.shuffledArray(this.maleIDs));
-        });
+        for (let g in config) {
+            if (g === 'men' || g === 'women') {
+                for (let k in config[g]) {
+                    if (!Array.isArray(config[g][k])) {
+                        throw new Error('Could not create priority list for ' +
+                            ((g === 'men') ? 'man' : 'woman') + ' "' + k + '": Priority list configuration must ' +
+                            'be an Array'); }
+                    if (config[g][k].length != this.n) {
+                        throw new Error('Could not create priority list for ' +
+                            ((g === 'men') ? 'man' : 'woman') + ' "' + k + '": Priority lists must be of ' +
+                            'same size as the whole instance (n=' + this.n + ')');}
+
+                    let person = this.getPersonByID(new Gender(g), keyMapping[k]);
+                    person.setPriorityList(config[g][k].map(v => {
+                        if (!keyMapping.hasOwnProperty(v)) {
+                            throw new Error('Could not create priority list for ' +
+                                ((g === 'men') ? 'man' : 'woman') + ' "' + k + '": Unknown key "' + v + '"'); }
+                        let knownKeysForOppositeGender = (g === 'men') ? configWomenKeys : configMenKeys;
+                        if (knownKeysForOppositeGender.indexOf(v + '') < 0) {
+                            throw new Error('Could not create priority list for ' +
+                                ((g === 'men') ? 'man' : 'woman') + ' "' + k + '": Key "' + v + '" is invalid '+
+                                '(priority lists may only contain persons of opposite sex)'); }
+
+                        return keyMapping[v];
+                    }));
+                }
+            }
+        }
     }
 
     get maleIDs () {
