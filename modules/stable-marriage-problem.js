@@ -31,10 +31,10 @@ class StableMarriageProblem {
 
         // Create priority lists
         this.men.forEach(v => {
-            v.setPriorityList(this.shuffledArray(this.femaleIDs));
+            v.setPriorityList(tools.shuffledArray(this.femaleIDs));
         });
         this.women.forEach(v => {
-            v.setPriorityList(this.shuffledArray(this.maleIDs));
+            v.setPriorityList(tools.shuffledArray(this.maleIDs));
         });
     }
 
@@ -60,19 +60,6 @@ class StableMarriageProblem {
             c++;
         }
         return null;
-    }
-
-    shuffledArray (orig) {
-        var shuffle = new Array(orig.length);
-        var c = 0;
-        while (c<orig.length) {
-            var pick = orig[Math.floor(Math.random()*orig.length)];
-            if (shuffle.indexOf(pick) < 0) {
-                shuffle[c] = pick;
-                c++;
-            }
-        }
-        return shuffle;
     }
 
     printPriorityTable () {
