@@ -44,6 +44,8 @@ class StableMarriageProblem {
             if (g === 'men' || g === 'women') {
                 for (let k in config[g]) {
                     let person = new Person();
+                    if (keyMapping.hasOwnProperty(k)) {
+                        throw new Error('Could not create Person with key "' + k + '": Key already exists'); }
                     keyMapping[k] = person.id;
                     if (g === 'men') {
                         this.men[this.men.length] = person; }
@@ -53,6 +55,7 @@ class StableMarriageProblem {
             }
         }
 
+        // Map priority lists from config to internal priority lists
         for (let g in config) {
             if (g === 'men' || g === 'women') {
                 for (let k in config[g]) {
