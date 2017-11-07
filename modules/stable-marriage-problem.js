@@ -86,18 +86,6 @@ class StableMarriageProblem {
         }
     }
 
-    get maleIDs () {
-        return this.men.map(v => {
-            return v.id;
-        });
-    }
-
-    get femaleIDs () {
-        return this.women.map(v => {
-            return v.id;
-        });
-    }
-
     getPersonByID (gender, id) {
         var list = (gender.value == 'male') ? this.men : this.women;
         var c = 0;
