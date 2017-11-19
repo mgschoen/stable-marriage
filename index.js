@@ -21,7 +21,7 @@ try {
         console.log('Generating stable marriage problem of size n=' + n + '...');
         json = Generator.randomStandardSMP(n);
     } else {
-        if (path.indexOf('/') != 0 || path.indexOf('./') != 0) {
+        if (path.indexOf('/') != 0 && path.indexOf('./') != 0) {
             path = './' + path;
         }
         console.log('Reading stable marriage instance from file "' + path + '"...');
