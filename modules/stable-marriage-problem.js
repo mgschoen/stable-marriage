@@ -43,7 +43,7 @@ class StableMarriageProblem {
         for (let g in config) {
             if (g === 'men' || g === 'women') {
                 for (let k in config[g]) {
-                    let person = new Person();
+                    let person = new Person(g);
                     if (keyMapping.hasOwnProperty(k)) {
                         throw new Error('Could not create Person with key "' + k + '": Key already exists'); }
                     keyMapping[k] = person.id;
